@@ -1,0 +1,34 @@
+{
+    "name": "dc/sms_pswincom",
+    "description": "Implementation of PSWinCom's XML API over HTTP(S)",
+    "minimum-stability": "stable",
+    "homepage": "http://github.com/digitalcreations/sms_pswincom",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Digital Creations AS",
+            "homepage": "http://www.digitalcreations.no",
+            "role": "Company"
+        },
+        {
+            "name": "Vegard Andreas Larsen",
+            "homepage": "http://vega.rd.no",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/digitalcreations/sms_pswincom/issues",
+        "source": "http://github.com/digitalcreations/sms_pswincom"
+    },
+    "autoload": {
+        "psr-4": {
+            "DC\\SMS\\": "src/SMS/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "require": {
+        "dc/sms": "dev-master"
+    }
+}
