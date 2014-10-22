@@ -29,6 +29,6 @@
         "phpunit/phpunit": "4.0.*"
     },
     "require": {
-        "dc/sms": "dev-master"
+        "dc/sms": "0.1"
     }
 }
