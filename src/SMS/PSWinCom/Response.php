@@ -46,7 +46,7 @@ class Response implements \DC\SMS\ResponseInterface {
     function getContent()
     {
         $xml = <<<EOXML
-<?xml version="1.0">
+<?xml version="1.0"?>
 <SESSION>
   <ID>$this->id</ID>
   <STATUS>%s</STATUS>
