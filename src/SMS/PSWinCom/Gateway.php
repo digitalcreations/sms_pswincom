@@ -29,8 +29,8 @@ class Gateway implements \DC\SMS\GatewayInterface {
      * @return \DC\SMS\MessageReceiptInterface|void
      */
     function sendMessage(\DC\SMS\TextMessageInterface $message) {
-        if ($message->getReceiver() == null) {
-            $message->getSender($this->configuration->defaultSender);
+        if ($message->getSender() == null) {
+            $message->setSender($this->configuration->defaultSender);
         }
 
         $session = [
