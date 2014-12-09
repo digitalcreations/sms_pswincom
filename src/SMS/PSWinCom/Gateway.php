@@ -53,6 +53,9 @@ class Gateway implements \DC\SMS\GatewayInterface {
 
         if ($message->getTariff() != null) {
             $session["MSGLST"]["MSG"]["TARIFF"] = $message->getTariff();
+            if ($this->configuration->isGoodsAndServices) {
+                $session["MSGLST"]["MSG"]["SERVICECODE"] = $this->configuration->serviceCode;
+            }
         }
 
         $result = $this->call($session);

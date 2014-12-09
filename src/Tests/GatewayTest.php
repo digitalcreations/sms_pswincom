@@ -39,7 +39,7 @@ EOXML;
     public function testSendMessageWithTariff()
     {
         $xmlIn = "<?xml version=\"1.0\"?>\n" .
-            "<SESSION><CLIENT>foo</CLIENT><PW>bar</PW><MSGLST><MSG><ID>1</ID><TEXT>Does this work?</TEXT><SND>Vegard</SND><RCV>4712345678</RCV><RCPREQ>Y</RCPREQ><TARIFF>100</TARIFF></MSG></MSGLST></SESSION>\n";
+            "<SESSION><CLIENT>foo</CLIENT><PW>bar</PW><MSGLST><MSG><ID>1</ID><TEXT>Does this work?</TEXT><SND>Vegard</SND><RCV>4712345678</RCV><RCPREQ>Y</RCPREQ><TARIFF>100</TARIFF><SERVICECODE>16007</SERVICECODE></MSG></MSGLST></SESSION>\n";
         $xmlOut = <<<EOXML
 <?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
 EOXML;
