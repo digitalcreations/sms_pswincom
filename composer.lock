@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e3d5e9338e1326307f4ae6dc43dd8cef",
+    "hash": "88191c48c39a5999e056dd3345c1b171",
     "packages": [
         {
             "name": "dc/sms",
-            "version": "0.1",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/digitalcreations/sms.git",
-                "reference": "ef3b5798d0cb14ae80fcade6d14e6cd49f062b21"
+                "reference": "35e159ef3eb8e5500d1440dc46961e01d2983905"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digitalcreations/sms/zipball/ef3b5798d0cb14ae80fcade6d14e6cd49f062b21",
-                "reference": "ef3b5798d0cb14ae80fcade6d14e6cd49f062b21",
+                "url": "https://api.github.com/repos/digitalcreations/sms/zipball/35e159ef3eb8e5500d1440dc46961e01d2983905",
+                "reference": "35e159ef3eb8e5500d1440dc46961e01d2983905",
                 "shasum": ""
             },
             "require-dev": {
@@ -47,7 +47,7 @@
             ],
             "description": "Interfaces for interchangeable SMS providers (CPA and bulk)",
             "homepage": "http://github.com/digitalcreations/sms",
-            "time": "2014-10-22 11:52:13"
+            "time": "2014-12-09 14:06:47"
         }
     ],
     "packages-dev": [

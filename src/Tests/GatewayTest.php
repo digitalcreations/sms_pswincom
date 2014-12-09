@@ -57,6 +57,7 @@ EOXML;
         $result = $api->sendMessage($msg);
 
         $this->assertTrue($result->wasEnqueued());
+        $this->assertEquals("<?xml version=\"1.0\"?>\n<SESSION><LOGON>OK</LOGON><REASON/><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO/></MSG></MSGLST></SESSION>\n", $result->getResponseContent());
         $this->assertEquals("2DB9594B-8251-4647-B468-EB325872031C", $result->getMessageIdentifier());
     }
 
