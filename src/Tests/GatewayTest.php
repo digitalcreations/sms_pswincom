@@ -2,10 +2,13 @@
 
 namespace DC\Tests;
 
+use DC\SMS\PSWinCom\Gateway;
+
 class GatewayTest extends \PHPUnit_Framework_TestCase {
 
     private function getConfiguration() {
         $configuration = new \DC\SMS\PSWinCom\Configuration();
+        $configuration->endpoint = "http://example.com/f0000";
         $configuration->username = "foo";
         $configuration->password = "bar";
         $configuration->defaultSender = "phpunit";
@@ -59,6 +62,20 @@ EOXML;
         $this->assertTrue($result->wasEnqueued());
         $this->assertEquals("<?xml version=\"1.0\"?>\n<SESSION><LOGON>OK</LOGON><REASON/><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO/></MSG></MSGLST></SESSION>\n", $result->getResponseContent());
         $this->assertEquals("2DB9594B-8251-4647-B468-EB325872031C", $result->getMessageIdentifier());
+    }
+
+    /**
+     * @expectedException \DC\SMS\PSWinCom\GatewayException
+     */
+    public function testSendMessageWithError() {
+        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller->expects($this->once())
+            ->method('call')
+            ->willThrowException(new \DC\SMS\PSWinCom\GatewayException("Error", 1));
+
+        $api = new \DC\SMS\PSWinCom\Gateway($this->getConfiguration(), $mockCaller);
+        $msg = new \DC\SMS\TextMessage("Does this work?", "4712345678");
+        $api->sendMessage($msg);
     }
 
     public function testParseDeliveryReport() {

@@ -11,6 +11,9 @@ class Gateway implements \DC\SMS\GatewayInterface {
     private $apiCaller;
 
     function __construct(Configuration $configuration, APICaller $apiCaller = null) {
+        if (!is_array($configuration->endpoint)) {
+            $configuration->endpoint = [$configuration->endpoint];
+        }
         $this->configuration = $configuration;
         $this->apiCaller = isset($apiCaller) ? $apiCaller : new APICaller($configuration);
     }
@@ -19,14 +22,23 @@ class Gateway implements \DC\SMS\GatewayInterface {
         $xml = new \SimpleXMLElement('<?xml version="1.0"?><SESSION />');
         $this->arrayToXml($dataArray, $xml);
 
-        $xmlAsString = $xml->asXML();
-        $result = $this->apiCaller->call($xmlAsString);
-        return simplexml_load_string($result, 'SimpleXMLElement', LIBXML_NOCDATA);
+        $exception = null;
+        foreach ($this->configuration->endpoint as $endpoint) {
+            try {
+                $xmlAsString = $xml->asXML();
+                $result = $this->apiCaller->call($xmlAsString, $endpoint);
+                return simplexml_load_string($result, 'SimpleXMLElement', LIBXML_NOCDATA);
+            } catch (GatewayException $e) {
+                $exception = $e;
+            }
+        }
+        throw new GatewayException("Could not post message after trying all endpoints. Latest exception as inner exception.", 0, $exception);
     }
 
     /**
      * @param \DC\SMS\TextMessageInterface $message
      * @return \DC\SMS\MessageReceiptInterface|void
+     * @throws \DC\SMS\PSWinCom\GatewayException
      */
     function sendMessage(\DC\SMS\TextMessageInterface $message) {
         if ($message->getSender() == null) {
