@@ -27,6 +27,8 @@ class APICaller {
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml', 'Length: ' . count($xml)));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
