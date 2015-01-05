@@ -29,10 +29,16 @@ class APICaller {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
 
         $result = curl_exec($ch);
         if (curl_errno($ch)) {
             throw new GatewayException(curl_error($ch), curl_errno($ch));
+        }
+
+        $info = curl_getinfo($ch);
+        if ($info['http_code'] != 200) {
+            throw new GatewayException("Received HTTP error code.", $info['http_code']);
         }
         curl_close($ch);
 
