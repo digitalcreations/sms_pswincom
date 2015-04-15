@@ -59,6 +59,10 @@ class Gateway implements \DC\SMS\GatewayInterface {
             ]
         ];
 
+        if ($message->getTTL() > 0) {
+            $session["MSGLST"]["MSG"]["TTL"] = max(1, round($message->getTTL() / 60, 0));
+        }
+
         if ($message->getShortCode() != null) {
             $session["MSGLST"]["MSG"]["SHORTCODE"] = $message->getShortCode();
         }

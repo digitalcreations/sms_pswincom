@@ -64,6 +64,81 @@ EOXML;
         $this->assertEquals("2DB9594B-8251-4647-B468-EB325872031C", $result->getMessageIdentifier());
     }
 
+    public function testSendMessageWithTTL()
+    {
+        $xmlIn = "<?xml version=\"1.0\"?>\n" .
+            "<SESSION><CLIENT>foo</CLIENT><PW>bar</PW><MSGLST><MSG><ID>1</ID><TEXT>Does this work?</TEXT><SND>Vegard</SND><RCV>4712345678</RCV><RCPREQ>Y</RCPREQ><TTL>60</TTL></MSG></MSGLST></SESSION>\n";
+        $xmlOut = <<<EOXML
+<?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
+EOXML;
+
+        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo($xmlIn))
+            ->willReturn($xmlOut);
+
+        $api = new \DC\SMS\PSWinCom\Gateway($this->getConfiguration(), $mockCaller);
+        $msg = new \DC\SMS\TextMessage("Does this work?", "4712345678");
+        $msg->setSender("Vegard");
+        $msg->setTTL(3600); // 1 hour
+        $result = $api->sendMessage($msg);
+
+        $this->assertTrue($result->wasEnqueued());
+        $this->assertEquals("<?xml version=\"1.0\"?>\n<SESSION><LOGON>OK</LOGON><REASON/><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO/></MSG></MSGLST></SESSION>\n", $result->getResponseContent());
+        $this->assertEquals("2DB9594B-8251-4647-B468-EB325872031C", $result->getMessageIdentifier());
+    }
+
+    public function testSendMessageWithLessThanAMinuteTTL()
+    {
+        $xmlIn = "<?xml version=\"1.0\"?>\n" .
+            "<SESSION><CLIENT>foo</CLIENT><PW>bar</PW><MSGLST><MSG><ID>1</ID><TEXT>Does this work?</TEXT><SND>Vegard</SND><RCV>4712345678</RCV><RCPREQ>Y</RCPREQ><TTL>1</TTL></MSG></MSGLST></SESSION>\n";
+        $xmlOut = <<<EOXML
+<?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
+EOXML;
+
+        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo($xmlIn))
+            ->willReturn($xmlOut);
+
+        $api = new \DC\SMS\PSWinCom\Gateway($this->getConfiguration(), $mockCaller);
+        $msg = new \DC\SMS\TextMessage("Does this work?", "4712345678");
+        $msg->setSender("Vegard");
+        $msg->setTTL(25); // 25 seconds, this should be rounded to 1 minute
+        $result = $api->sendMessage($msg);
+
+        $this->assertTrue($result->wasEnqueued());
+        $this->assertEquals("<?xml version=\"1.0\"?>\n<SESSION><LOGON>OK</LOGON><REASON/><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO/></MSG></MSGLST></SESSION>\n", $result->getResponseContent());
+        $this->assertEquals("2DB9594B-8251-4647-B468-EB325872031C", $result->getMessageIdentifier());
+    }
+
+    public function testSendMessageWithUnevenTTL()
+    {
+        $xmlIn = "<?xml version=\"1.0\"?>\n" .
+            "<SESSION><CLIENT>foo</CLIENT><PW>bar</PW><MSGLST><MSG><ID>1</ID><TEXT>Does this work?</TEXT><SND>Vegard</SND><RCV>4712345678</RCV><RCPREQ>Y</RCPREQ><TTL>2</TTL></MSG></MSGLST></SESSION>\n";
+        $xmlOut = <<<EOXML
+<?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
+EOXML;
+
+        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo($xmlIn))
+            ->willReturn($xmlOut);
+
+        $api = new \DC\SMS\PSWinCom\Gateway($this->getConfiguration(), $mockCaller);
+        $msg = new \DC\SMS\TextMessage("Does this work?", "4712345678");
+        $msg->setSender("Vegard");
+        $msg->setTTL(90); // 90 seconds, this should be rounded to 2 minutes
+        $result = $api->sendMessage($msg);
+
+        $this->assertTrue($result->wasEnqueued());
+        $this->assertEquals("<?xml version=\"1.0\"?>\n<SESSION><LOGON>OK</LOGON><REASON/><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO/></MSG></MSGLST></SESSION>\n", $result->getResponseContent());
+        $this->assertEquals("2DB9594B-8251-4647-B468-EB325872031C", $result->getMessageIdentifier());
+    }
+
     /**
      * @expectedException \DC\SMS\PSWinCom\GatewayException
      */
