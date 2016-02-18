@@ -75,7 +75,7 @@ class Gateway implements \DC\SMS\GatewayInterface {
         }
 
         $result = $this->call($session);
-        return new \DC\SMS\MessageReceipt($result->MSGLST[0]->MSG->REF, $result->MSGLST[0]->MSG->STATUS == "OK", $result->asXML());
+        return new \DC\SMS\MessageReceipt((string)$result->MSGLST[0]->MSG->REF, $result->MSGLST[0]->MSG->STATUS == "OK", $result->asXML());
     }
 
     private function arrayToXml($array, \SimpleXMLElement $xml) {
