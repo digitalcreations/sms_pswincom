@@ -23,7 +23,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase {
 <?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
 EOXML;
 
-        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller = $this->createMock('\DC\SMS\PSWinCom\APICaller');
         $mockCaller->expects($this->once())
             ->method('call')
             ->with($this->equalTo($xmlIn))
@@ -47,7 +47,7 @@ EOXML;
 <?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
 EOXML;
 
-        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller = $this->createMock('\DC\SMS\PSWinCom\APICaller');
         $mockCaller->expects($this->once())
             ->method('call')
             ->with($this->equalTo($xmlIn))
@@ -72,7 +72,7 @@ EOXML;
 <?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
 EOXML;
 
-        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller = $this->createMock('\DC\SMS\PSWinCom\APICaller');
         $mockCaller->expects($this->once())
             ->method('call')
             ->with($this->equalTo($xmlIn))
@@ -97,7 +97,7 @@ EOXML;
 <?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
 EOXML;
 
-        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller = $this->createMock('\DC\SMS\PSWinCom\APICaller');
         $mockCaller->expects($this->once())
             ->method('call')
             ->with($this->equalTo($xmlIn))
@@ -122,7 +122,7 @@ EOXML;
 <?xml version="1.0"?><SESSION><LOGON>OK</LOGON><REASON></REASON><MSGLST><MSG><ID>1</ID><REF>2DB9594B-8251-4647-B468-EB325872031C</REF><STATUS>OK</STATUS><INFO></INFO></MSG></MSGLST></SESSION>
 EOXML;
 
-        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller = $this->createMock('\DC\SMS\PSWinCom\APICaller');
         $mockCaller->expects($this->once())
             ->method('call')
             ->with($this->equalTo($xmlIn))
@@ -143,7 +143,7 @@ EOXML;
      * @expectedException \DC\SMS\PSWinCom\GatewayException
      */
     public function testSendMessageWithError() {
-        $mockCaller = $this->getMock('\DC\SMS\PSWinCom\APICaller');
+        $mockCaller = $this->createMock('\DC\SMS\PSWinCom\APICaller');
         $mockCaller->expects($this->once())
             ->method('call')
             ->willThrowException(new \DC\SMS\PSWinCom\GatewayException("Error", 1));
